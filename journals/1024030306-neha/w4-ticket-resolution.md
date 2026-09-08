@@ -2,13 +2,15 @@
 
 | Ticket | Description | Status |
 |---|---|---|
-| AGR-38 | Write real `resource.model.js` query functions | Done |
-| AGR-39 | Write real `booking.model.js` with FOR UPDATE conflict lock | Done |
-| AGR-40 | Write real `breakdown.model.js` + nearby-mechanic query | Done |
+| AGR-30 | Implement `resources.controller.js` (list + create, real DB) | Done |
+| AGR-31 | Implement `bookings.controller.js` (create, accept/reject, list) | Done |
+| AGR-32 | Implement transactional conflict-detection in `booking.model.js` | Done |
+| AGR-33 | Implement `breakdown.controller.js` (report + nearby mechanics) | Done |
 
 ## Notes
-Resource/booking/breakdown tables were already migrated back in Week 3,
-so this week was just the query layer on top. Nearby-mechanic matching
-is a simple "same type=service listing" join for now — real distance
-calculation needs lat/lng on every listing, which is flagged as a
-follow-up (matches R3 in the risk register).
+Conflict detection uses `SELECT ... FOR UPDATE` inside a transaction to
+avoid a race condition where two farmers could both get a "success"
+response for the same overlapping slot if they hit the endpoint at the
+same instant. Tested this directly: booked a tractor 8am-6pm, accepted
+it, then tried to book an overlapping window as a different farmer —
+correctly got a 409. A non-overlapping booking the next day succeeded.

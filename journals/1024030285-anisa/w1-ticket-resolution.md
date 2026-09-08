@@ -2,10 +2,9 @@
 
 | Ticket | Description | Status |
 |---|---|---|
-| AGR-1 | Sketch basic screen layout for resource search page | Done |
-| AGR-2 | Set up frontend project structure (`code/frontend`) | Done |
+| AGR-6 | List core entities needed (users, resources, bookings, ledger) | Done |
+| AGR-7 | Sketch table columns for `resources` and `bookings` | Done |
 
 ## Notes
-Kept the frontend as a single static page for now instead of a full
-React build — enough to hit the backend API and show data on screen.
-Will move to a proper React setup once more screens are needed.
+Kept this rough for now — a proper ER diagram and full column list once
+the backend routes settle on what fields they actually need.

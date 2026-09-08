@@ -2,13 +2,13 @@
 
 | Ticket | Description | Status |
 |---|---|---|
-| AGR-34 | Build `ResourceSearch.jsx` — filter, list, book | Done |
-| AGR-35 | Build `Bookings.jsx` — farmer view + provider accept/reject | Done |
-| AGR-36 | Build `BreakdownReport.jsx` — report + nearby mechanics list | Done |
-| AGR-37 | Add nav links on Dashboard to reach new pages | Done |
+| AGR-38 | Write real `resource.model.js` query functions | Done |
+| AGR-39 | Write real `booking.model.js` with FOR UPDATE conflict lock | Done |
+| AGR-40 | Write real `breakdown.model.js` + nearby-mechanic query | Done |
 
 ## Notes
-Tested in an actual browser: registered a farmer through the real UI,
-navigated to /resources, saw real seeded listings (a harvester and two
-tractors from earlier test data), opened the booking form on one. Not
-styled yet — that's a polish pass once Phase 3 is functionally complete.
+Resource/booking/breakdown tables were already migrated back in Week 3,
+so this week was just the query layer on top. Nearby-mechanic matching
+is a simple "same type=service listing" join for now — real distance
+calculation needs lat/lng on every listing, which is flagged as a
+follow-up (matches R3 in the risk register).

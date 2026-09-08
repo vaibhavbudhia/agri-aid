@@ -2,13 +2,14 @@
 
 | Ticket | Description | Status |
 |---|---|---|
-| AGR-16 | Implement real `user.model.js` query functions | Done |
-| AGR-17 | Implement `POST /api/auth/register` with bcrypt hashing | Done |
-| AGR-18 | Implement `POST /api/auth/login` with credential check + JWT | Done |
-| AGR-19 | Implement `GET /api/profile` (protected route) | Done |
+| AGR-25 | Set up real Vite + React build (replacing static stubs) | Done |
+| AGR-26 | Build working `Login.jsx` and `Register.jsx` against the live API | Done |
+| AGR-27 | Build working `Dashboard.jsx` fetching real profile data | Done |
+| AGR-28 | Wire routing in `App.jsx`, root redirects to `/login` | Done |
 
 ## Notes
-Tested the full flow with curl against the real DB: register, duplicate
-register (409), login, login with wrong password (401), protected route
-without token (401), protected route with token (200, real data). All
-verified working, not just written.
+Verified the whole flow in an actual browser (Playwright), not just by
+reading the code: root redirects to /login, filled out the register form,
+submitted, landed on /dashboard, and it displayed the exact name/region
+that was typed in — round-tripped through the real backend and DB.
+No styling yet — that's next, once Foundation is fully wired.

@@ -2,11 +2,10 @@
 
 | Ticket | Description | Status |
 |---|---|---|
-| AGR-3 | Set up Express server skeleton (`code/backend`) | Done |
-| AGR-4 | Add `GET /api/resources` route with mock data | Done |
-| AGR-5 | Add `POST /api/resources` route | Done |
+| AGR-1 | Sketch basic screen layout for resource search page | Done |
+| AGR-2 | Set up frontend project structure (`code/frontend`) | Done |
 
 ## Notes
-Using an in-memory array instead of a real database for now, just to
-get the request/response flow working end-to-end. Swapping in
-PostgreSQL is next once the schema is finalized.
+Kept the frontend as a single static page for now instead of a full
+React build — enough to hit the backend API and show data on screen.
+Will move to a proper React setup once more screens are needed.

@@ -1,6 +1,6 @@
-# Lovish Bansal (1024030297)
+# Anisa Arora (1024030285)
 
-**Focus area:** Backend (Node.js + Express)
+**Focus area:** Frontend (React + Tailwind)
 
 Weekly logs:
 - [Week 1 — Ticket Resolution](w1-ticket-resolution.md)

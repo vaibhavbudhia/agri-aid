@@ -2,15 +2,13 @@
 
 | Ticket | Description | Status |
 |---|---|---|
-| AGR-30 | Implement `resources.controller.js` (list + create, real DB) | Done |
-| AGR-31 | Implement `bookings.controller.js` (create, accept/reject, list) | Done |
-| AGR-32 | Implement transactional conflict-detection in `booking.model.js` | Done |
-| AGR-33 | Implement `breakdown.controller.js` (report + nearby mechanics) | Done |
+| AGR-34 | Build `ResourceSearch.jsx` — filter, list, book | Done |
+| AGR-35 | Build `Bookings.jsx` — farmer view + provider accept/reject | Done |
+| AGR-36 | Build `BreakdownReport.jsx` — report + nearby mechanics list | Done |
+| AGR-37 | Add nav links on Dashboard to reach new pages | Done |
 
 ## Notes
-Conflict detection uses `SELECT ... FOR UPDATE` inside a transaction to
-avoid a race condition where two farmers could both get a "success"
-response for the same overlapping slot if they hit the endpoint at the
-same instant. Tested this directly: booked a tractor 8am-6pm, accepted
-it, then tried to book an overlapping window as a different farmer —
-correctly got a 409. A non-overlapping booking the next day succeeded.
+Tested in an actual browser: registered a farmer through the real UI,
+navigated to /resources, saw real seeded listings (a harvester and two
+tractors from earlier test data), opened the booking form on one. Not
+styled yet — that's a polish pass once Phase 3 is functionally complete.
