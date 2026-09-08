@@ -1,0 +1,252 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[margin=1in]{geometry}
+\usepackage{hyperref}
+\usepackage{enumitem}
+\usepackage{booktabs}
+\usepackage{tabularx}
+\usepackage{amsmath}
+\usepackage{titlesec}
+
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    filecolor=magenta,      
+    urlcolor=cyan,
+    pdftitle={AgriAid Project Proposal},
+}
+
+\title{\textbf{AgriAid: Digital Community Resource \& Farm Management System}\\[0.3em]
+\large Project Proposal for UCS503\\
+\large Submitted to: Ms. Anushka\\
+\textbf{Thapar Institute of Engineering and Technology}}
+
+\author{
+Anisa Arora, 1024030285 \and
+Lovish Bansal, 1024030297 \and
+Neha Bansal, 1024030306 \and
+Vaibhav Budhia, 1024030307
+}
+
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\section{Higher-order goal}
+This project aims to improve the operational efficiency, financial transparency, and accessibility of government welfare for Indian farmers by digitizing non-agronomic operational workflows around the farming ecosystem.
+
+While the broader objective is to empower rural agricultural communities through shared economics and streamlined record-keeping, the immediate engineering goal is to translate informal, offline farm coordination workflows into a measurable, secure, and deployable software platform.
+
+The proposed system, \textbf{AgriAid}, connects farmer identity, available agricultural machinery and repair services, local short-term labor requests, farm financial expense/revenue ledgers, rule-based government scheme eligibility matching, and agricultural insurance claim document organization within a single role-based platform.
+
+The project explicitly focuses on \textbf{operational coordination and workflow engineering} rather than agronomic advice or clinical crop diagnosis. Decision-making remains entirely under the control of the farmer; the system serves strictly as an information organizer and matching facilitator.
+
+\section{Time-to-value}
+\begin{itemize}[leftmargin=*]
+    \item We will deliver meaningful increments quickly by implementing the smallest complete operational workflow first: user authentication $\rightarrow$ resource registration $\rightarrow$ resource discovery $\rightarrow$ basic booking request $\rightarrow$ farm ledger entry.
+    \item We will prioritize a working end-to-end operational workflow over attempting to implement all three umbrella modules simultaneously.
+    \item We will initially implement basic manual location input and simple resource matching so that the core booking and financial recording workflow can be validated independently of advanced geo-fencing or mapping integration.
+    \item Location-based mapping (Leaflet / OpenStreetMap integration) will be introduced after experimentally validating coordinate handling and distance matching logic across web browsers.
+    \item We will use short development iterations and continuous testing so that integration issues in core modules are identified early.
+    \item CI/CD pipelines will be introduced early to automatically build, test, and deploy changes to a staging environment (Vercel / Render / Railway).
+    \item Success in the first iteration will be defined by whether a farmer can successfully list a resource, book a slot, and log an associated financial entry rather than by the sheer number of features implemented.
+\end{itemize}
+
+\section{Problem Statement}
+Indian farmers possess extensive practical knowledge of farming and crop production. The difficulties they face most acutely are not agronomic but operational---they arise around the farming ecosystem rather than within the act of farming itself. Current manual processes create several operational bottlenecks:
+\begin{itemize}[leftmargin=*]
+    \item \textbf{Inaccessible Machinery \& Services:} Farmers struggle to access expensive machinery (tractors, harvesters, rotavators) and local service providers on demand during critical seasonal windows.
+    \item \textbf{Inefficient Resource Sharing:} Resource sharing and transport pooling to mandis (produce markets) are arranged informally through word-of-mouth, leading to high individual costs and idle equipment capacity.
+    \item \textbf{Fragmented Expense Tracking:} Farm income, labor costs, and operational expenses are rarely recorded in a structured digital format, making seasonal financial analysis difficult.
+    \item \textbf{Opaque Government Benefits \& Claims:} Understanding eligibility rules for government schemes and assembling required documentation for insurance claims is complex, leading to missed financial aid.
+    \item \textbf{Lack of Centralized Records:} Farmer profiles, machinery listings, labor requests, financial records, and scheme applications exist in disconnected or manual paper formats.
+\end{itemize}
+
+\noindent \textbf{Why this matters now (contextual relevance):} Rural farming communities operate on tight seasonal schedules with limited financial margins. Digitizing operational coordination, transport pooling, and eligibility matching reduces avoidable expenses and administrative delays, significantly improving farm sustainability.
+
+\section{Proposed Solution}
+
+\subsection{Overview}
+Build a web-based platform that digitizes rural farm coordination while maintaining distinct roles and responsibilities for Farmers, Resource Providers, and System Administrators.
+
+The proposed AgriAid platform integrates three umbrella systems:
+\begin{enumerate}[leftmargin=*]
+    \item \textbf{Community Resource Network:} Enables discovery, individual/group booking, and transport pooling for agricultural machinery, alongside an equipment breakdown network for emergency repairs.
+    \item \textbf{Farm Operations \& Financial Management:} Coordinates local short-term labor requests and maintains structured expense/revenue ledgers by crop and season.
+    \item \textbf{Government Benefits \& Claims Assistance:} Matches farmer profiles against scheme eligibility rules and organizes required documentation for agricultural insurance claims.
+\end{enumerate}
+
+\subsection{Core workflow}
+\begin{enumerate}[leftmargin=*]
+    \item A farmer authenticates into AgriAid using secure JWT-based credentials and maintains a profile (land size, region, crop type).
+    \item The farmer searches for nearby available machinery or post a local labor requirement.
+    \item For machinery/services, the farmer submits an individual or group booking request.
+    \item The resource provider receives notification of the request and accepts, rejects, or reschedules it.
+    \item The system checks for scheduling overlaps and updates the reservation state.
+    \item Following farm operations or produce delivery, the farmer logs transaction details into the Farm Ledger (expense or sales revenue).
+    \item To access state benefits, the system runs a rule-based matching engine against the farmer's profile to list eligible government schemes and application checklists.
+    \item In case of crop damage, the farmer uploads photos and incident data to create an organized insurance claim folder.
+\end{enumerate}
+
+\subsection{Operational constraints for an educational campus setting}
+\begin{itemize}[leftmargin=*]
+    \item \textbf{Academic Timeline:} The system must be designed, implemented, and evaluated within a single 12-week academic semester by a 3–4 member student engineering team.
+    \item \textbf{Usability for Low Digital Literacy:} Interfaces must be simple, mobile-responsive, and rely heavily on clear icons and minimal text input.
+    \item \textbf{Zero Infrastructure Cost:} The solution must operate within free-tier cloud hosting (Vercel, Render/Railway, Supabase) and open-source stacks.
+    \item \textbf{Non-Adjudicative Scope:} The application strictly organizes data and assists workflow; it does not issue legal approvals, guaranteed loans, or official government claim settlements.
+\end{itemize}
+
+\section{Solution Approach}
+
+\subsection{Structured prescription and dispensing}
+Analogous to clinical prescription vs. dispensing records, AgriAid maintains strict separation between financial inputs/claims documentation and final verified records:
+\begin{itemize}[leftmargin=*]
+    \item \textbf{Structured Farm Ledger Entries:} Financial data is recorded using standardized categories (Seeds, Fertilizer, Labor, Fuel, Machinery, Transport) with structured fields (Amount, Date, Crop Cycle, Yield Revenue) rather than unstructured notes.
+    \item \textbf{Insurance Claim Record Separation:} Claim evidence uploaded by the farmer (photos, incident details) is maintained as an unalterable historical log, while status updates and missing item checklists are tracked separately.
+\end{itemize}
+
+\subsection{Web architecture}
+AgriAid uses a 3-tier, service-oriented architecture:
+\begin{itemize}[leftmargin=*]
+    \item \textbf{Frontend:} React.js + Tailwind CSS providing responsive user dashboards and icon-driven interfaces.
+    \item \textbf{Backend API:} Node.js + Express.js REST APIs handling authentication, business logic, scheduling conflict algorithms, and eligibility rule engines.
+    \item \textbf{Database \& Storage:} PostgreSQL for structured relational data (users, resources, bookings, ledger entries) and Supabase Storage for claim documents/photographs.
+\end{itemize}
+
+\subsection{Authentication and authorization}
+\begin{itemize}[leftmargin=*]
+    \item JWT-based session tokens for secure stateless authentication.
+    \item Role-Based Access Control (RBAC) supporting three primary roles: \textit{Farmer}, \textit{Resource Provider}, and \textit{Administrator}.
+    \item Seamless support for dual status (e.g., an individual acting as both a Farmer requesting labor and a Resource Provider listing a tractor).
+\end{itemize}
+
+\subsection{NFC/RFID identity integration}
+\textit{(Mapped to Location \& Resource Identity Mapping in AgriAid)}
+\begin{itemize}[leftmargin=*]
+    \item Resources and farms are tied to geographic coordinate identifiers mapped via OpenStreetMap and Leaflet.
+    \item Manual pin-drop fallback is provided where GPS geolocation is unavailable or inaccurate.
+\end{itemize}
+
+\subsection{Queue management}
+\textit{(Mapped to Resource Scheduling \& Labor Matching in AgriAid)}
+\begin{itemize}[leftmargin=*]
+    \item \textbf{Atomic Booking Transactions:} Conflict-detection logic flags and prevents double-booking of machinery for overlapping time windows.
+    \item \textbf{Labor Request Queue:} Local short-term labor requests are published into a location-radius queue where local workers/groups can view and respond based on availability.
+\end{itemize}
+
+\subsection{CI/CD and fast delivery enabler}
+\begin{itemize}[leftmargin=*]
+    \item Automated builds, linting, and testing via GitHub Actions.
+    \item Unit and integration testing using Jest, Supertest, and Postman.
+    \item Automatic staging deployment to Vercel (Frontend) and Render/Railway (Backend API).
+\end{itemize}
+
+\section{Evaluation Criterion}
+
+\subsection{Primary evaluation metric}
+\textbf{Search and Matching Query Response Time:} The duration taken between initiating a resource/scheme search and receiving matched results.
+\begin{itemize}[leftmargin=*]
+    \item \textbf{Target:} $< 2$ seconds response time for 95\% of requests under typical prototype load.
+    \item \textbf{Measurement:} Automated API latency logging and database transaction timestamps.
+\end{itemize}
+
+\subsection{Secondary evaluation metrics}
+\begin{itemize}[leftmargin=*]
+    \item \textbf{Booking Conflict Prevention:} 100\% detection and flagging of overlapping booking windows.
+    \item \textbf{Ledger Calculation Accuracy:} Correct summation of seasonal net outcomes across expense/revenue entries.
+    \item \textbf{Usability:} Successful task completion by a first-time user without prior training.
+    \item \textbf{System Availability:} $\ge 95\%$ uptime during the project evaluation window.
+    \item \textbf{Authorization Security:} Zero unauthorized access to administrative rule configurations or private financial ledgers.
+\end{itemize}
+
+\subsection{Pilot validation plan}
+\begin{itemize}[leftmargin=*]
+    \item Populate database with synthetic regional farmer profiles, equipment listings, and government schemes.
+    \item Recruit representative student/evaluator test users to execute workflows (resource booking, breakdown logging, labor posting, expense recording, scheme matching).
+    \item Compare system execution metrics against baseline manual operational scenarios.
+\end{itemize}
+
+\section{Scalability}
+\begin{itemize}[leftmargin=*]
+    \item \textbf{Theoretical Scalability:} Layered service-oriented architecture, database normalization up to 3NF, indexed PostgreSQL queries, paginated API responses, and stateless JWT authentication.
+    \item \textbf{Operational Deployability:} Free-tier managed cloud infrastructure (Supabase PostgreSQL, Vercel, Render) with environment-based configuration.
+\end{itemize}
+
+\section{Engine availability heuristic}
+The technology stack relies entirely on production-grade, open-source, and freely available technologies:
+\begin{itemize}[leftmargin=*]
+    \item \textbf{Frontend:} React.js, Tailwind CSS
+    \item \textbf{Backend:} Node.js, Express.js
+    \item \textbf{Database \& Storage:} PostgreSQL, Supabase Storage
+    \item \textbf{Maps/Location:} Leaflet, OpenStreetMap
+    \item \textbf{Testing \& CI/CD:} Jest, Supertest, Postman, Git/GitHub, Vercel, Render
+\end{itemize}
+
+\section{Project scope and deliverables}
+
+\subsection{Initial deliverable}
+\begin{itemize}[leftmargin=*]
+    \item User profile management and JWT authentication.
+    \item PostgreSQL schema and database migrations.
+    \item Single-resource listing and simple booking request flow.
+    \item Basic Farm Ledger entry (expenses/revenue logging).
+    \item Staging environment deployment and CI build setup.
+\end{itemize}
+
+\subsection{Subsequent deliverables}
+\begin{itemize}[leftmargin=*]
+    \item Group booking with automatic overlap conflict detection.
+    \item Farm equipment breakdown reporting and nearby service locator.
+    \item Short-term local labor request and matching queue.
+    \item Rule-based government scheme eligibility engine and application checklist.
+    \item Insurance claim record creation and document/photo upload.
+    \item Administrative dashboard for scheme rule management.
+\end{itemize}
+
+\subsection{Stretch deliverables}
+\begin{itemize}[leftmargin=*]
+    \item UI Localization / regional language translation via string externalization.
+    \item Provider service history and rating system.
+\end{itemize}
+
+\subsection{Explicitly out of scope}
+\begin{itemize}[leftmargin=*]
+    \item Full-scale e-commerce agricultural input/produce marketplace.
+    \item Direct replacement of government procurement systems or mandis.
+    \item Actual approval, adjudication, or payout of scheme applications and insurance claims.
+    \item Complete banking, loan, or payment gateway infrastructure.
+    \item Advanced AI-based crop disease diagnosis or automated crop recommendation.
+\end{itemize}
+
+\section{Risks and mitigations}
+
+\begin{table}[h!]
+\centering
+\small
+\begin{tabularx}{\textwidth}{c X c c c X}
+\toprule
+\textbf{ID} & \textbf{Risk Description} & \textbf{Cat.} & \textbf{L} & \textbf{I} & \textbf{Mitigation Strategy} \\
+\midrule
+R1 & Scheme eligibility rules become outdated as policies change. & Data & 4 & 4 & Store rules in admin-editable DB tables, not hardcoded logic. \\
+R2 & Resource availability drifts from real-world status. & Oper. & 3 & 3 & Prompt providers to confirm availability; auto-expire stale listings. \\
+R3 & Inaccurate location calculation degrades match quality. & Tech & 3 & 4 & Validate coordinates on entry; geo-distance library; manual pin fallback. \\
+R4 & Group bookings create scheduling conflicts for same slot. & Tech & 3 & 3 & Server-side atomic booking transactions; clear conflict UI. \\
+R5 & Labor-matching logic becomes overly complex. & Tech & 2 & 3 & Implement simple rule-based matching first; defer complex heuristics. \\
+R6 & Sensitive claim documents exposed due to weak access control. & Sec. & 2 & 5 & Enforce strict RBAC + JWT on endpoints; use signed expiring URLs. \\
+R7 & Low digital literacy reduces adoption / correct usage. & UX & 3 & 4 & Minimal-text, icon-driven UI; user testing early in cycle. \\
+R8 & Synthetic demo data weakens demonstration value. & Oper. & 2 & 2 & Curate realistic seed datasets of local schemes early. \\
+R9 & Team schedule slips due to academic overlap. & Sched. & 3 & 3 & Weekly milestone check-ins; buffer week before final deadline. \\
+R10 & Scope creep beyond core 6 components. & Sched. & 3 & 3 & Enforce scope boundary; defer new ideas to future work. \\
+\bottomrule
+\end{tabularx}
+\caption{Risk Assessment Matrix (L = Likelihood 1--5, I = Impact 1--5)}
+\end{table}
+
+\section{Summary}
+AgriAid provides a practical, deployable web platform designed to solve operational coordination, financial tracking, and benefit assistance challenges faced by rural farmers.
+
+To achieve this within a 12-week academic semester, the team selected an \textbf{Agile-Incremental Hybrid SDLC Model}. Core infrastructure (Auth/Database) is built as a foundation increment, followed by three sprint-style increments representing each umbrella module. This isolates development risk, ensures continuous integration, and guarantees a demonstrable working product at each project checkpoint.
+
+\end{document}
