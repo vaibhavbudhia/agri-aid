@@ -1,4 +1,4 @@
-# Lovish Bansal (1024030297)
+# Neha Bansal (1024030306)
 
 **Focus area:** Backend (Node.js + Express)
 

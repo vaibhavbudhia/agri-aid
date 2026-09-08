@@ -1,4 +1,4 @@
-# Neha Bansal (1024030306)
+Anisa Arora (1024030285)
 
 **Focus area:** Database (PostgreSQL / Supabase)
 

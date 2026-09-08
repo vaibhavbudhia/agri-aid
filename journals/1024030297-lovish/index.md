@@ -1,4 +1,4 @@
-# Anisa Arora (1024030285)
+# Lovish Bansal (1024030297)
 
 **Focus area:** Frontend (React + Tailwind)
 
