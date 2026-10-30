@@ -1,3 +1,5 @@
-// ledger_entries table shape.
-// id, farmer_id (FK), entry_type ('expense'|'revenue'), category, amount, crop_cycle, entry_date
-module.exports = {};
+const db = require('../config/db');
+async function create(x){return (await db.query(`INSERT INTO ledger_entries (farmer_id,entry_type,category,amount,crop_cycle,entry_date,notes) VALUES ($1,$2,$3,$4,$5,$6,$7) RETURNING *`,[x.farmerId,x.entryType,x.category,x.amount,x.cropCycle||null,x.entryDate,x.notes||null])).rows[0];}
+async function list(id,crop){return (await db.query(`SELECT * FROM ledger_entries WHERE farmer_id=$1 ${crop?'AND crop_cycle=$2':''} ORDER BY entry_date DESC,created_at DESC`,crop?[id,crop]:[id])).rows;}
+async function summary(id){return (await db.query(`SELECT COALESCE(crop_cycle,'Unassigned') crop_cycle,COALESCE(SUM(amount) FILTER (WHERE entry_type='revenue'),0)::numeric revenue,COALESCE(SUM(amount) FILTER (WHERE entry_type='expense'),0)::numeric expense,(COALESCE(SUM(amount) FILTER (WHERE entry_type='revenue'),0)-COALESCE(SUM(amount) FILTER (WHERE entry_type='expense'),0))::numeric net FROM ledger_entries WHERE farmer_id=$1 GROUP BY crop_cycle ORDER BY crop_cycle`,[id])).rows;}
+module.exports={create,list,summary};

@@ -4,7 +4,7 @@
 import { useEffect, useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import apiRequest from '../api/client';
-import { IconHome, IconSearch, IconCalendar, IconWrench, IconLifeBuoy, IconLogOut } from './icons';
+import { IconHome, IconSearch, IconCalendar, IconWrench, IconLifeBuoy, IconLogOut, IconRupee } from './icons';
 
 const LINKS = [
   { to: '/dashboard', label: 'Overview', icon: IconHome, roles: ['farmer', 'provider', 'admin'] },
@@ -13,6 +13,8 @@ const LINKS = [
   { to: '/bookings', label: 'My bookings', icon: IconCalendar, roles: ['farmer', 'provider', 'admin'] },
   { to: '/breakdowns', label: 'Report breakdown', icon: IconWrench, roles: ['farmer', 'admin'] },
   { to: '/repair-queue', label: 'Repair queue', icon: IconWrench, roles: ['provider'] },
+  { to: '/labour', label: 'Labour exchange', icon: IconCalendar, roles: ['farmer', 'provider', 'admin'] },
+  { to: '/ledger', label: 'Farm ledger', icon: IconRupee, roles: ['farmer'] },
   { to: '/support', label: 'Support', icon: IconLifeBuoy, roles: ['farmer', 'provider', 'admin'] },
 ];
 

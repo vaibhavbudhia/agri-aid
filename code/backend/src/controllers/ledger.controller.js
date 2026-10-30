@@ -1,13 +1,5 @@
-// Farm expense/revenue ledger. Not implemented — Phase 4.
-
-async function addLedgerEntry(req, res) {
-  // TODO: insert ledger_entries row
-  res.status(501).json({ error: 'not implemented' });
-}
-
-async function getLedgerSummary(req, res) {
-  // TODO: sum expense/revenue by crop_cycle for req.user.id
-  res.status(501).json({ error: 'not implemented' });
-}
-
-module.exports = { addLedgerEntry, getLedgerSummary };
+const ledger = require('../models/ledgerEntry.model');
+const CATEGORIES = ['seeds','fertilizer','labour','fuel','machinery','transport','produce_sale'];
+async function addLedgerEntry(req,res){if(req.user.role!=='farmer')return res.status(403).json({error:{code:'FORBIDDEN',message:'Only farmer accounts can add farm-ledger entries.'}});const {entry_type,category,amount,crop_cycle,entry_date,notes}=req.body;if(!['expense','revenue'].includes(entry_type)||!CATEGORIES.includes(category)||!amount||Number(amount)<=0||!entry_date)return res.status(400).json({error:{code:'VALIDATION_ERROR',message:'Provide a positive amount, date, valid type and category.'}});if(entry_type==='revenue'&&category!=='produce_sale')return res.status(400).json({error:{code:'VALIDATION_ERROR',message:'Revenue entries must use produce_sale.'}});res.status(201).json(await ledger.create({farmerId:req.user.id,entryType:entry_type,category,amount:Number(amount),cropCycle:crop_cycle,entryDate:entry_date,notes}));}
+async function getLedgerSummary(req,res){if(req.user.role!=='farmer')return res.status(403).json({error:{code:'FORBIDDEN',message:'Farm ledgers are private to farmer accounts.'}});res.json({results:await ledger.list(req.user.id,req.query.crop_cycle),summary:await ledger.summary(req.user.id)});}
+module.exports={addLedgerEntry,getLedgerSummary};

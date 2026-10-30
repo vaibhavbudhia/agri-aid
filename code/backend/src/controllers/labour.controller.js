@@ -1,13 +1,9 @@
-// Local labour request + matching logic. Not implemented — Phase 4.
-
-async function createLabourRequest(req, res) {
-  // TODO: insert labour_requests row
-  res.status(501).json({ error: 'not implemented' });
-}
-
-async function matchNearbyWorkers(req, res) {
-  // TODO: return labour requests within a radius of the worker's location
-  res.status(501).json({ error: 'not implemented' });
-}
-
-module.exports = { createLabourRequest, matchNearbyWorkers };
+const labour=require('../models/labour.model');
+const coord=(v,max)=>v==null||v===''||(Number.isFinite(Number(v))&&Math.abs(Number(v))<=max);
+async function createLabourRequest(req,res){if(req.user.role!=='farmer')return res.status(403).json({error:{code:'FORBIDDEN',message:'Only farmer accounts can post labour requirements.'}});const x=req.body;if(!x.work_type?.trim()||!Number.isInteger(Number(x.workers_needed))||Number(x.workers_needed)<1||!x.work_date||!Number.isInteger(Number(x.duration_days))||Number(x.duration_days)<1||!coord(x.latitude,90)||!coord(x.longitude,180)||(x.budget_per_worker!=null&&x.budget_per_worker!==''&&Number(x.budget_per_worker)<0))return res.status(400).json({error:{code:'VALIDATION_ERROR',message:'Provide work details, positive workers/days, and valid coordinates.'}});if(new Date(`${x.work_date}T00:00:00`)<new Date(new Date().toDateString()))return res.status(400).json({error:{code:'VALIDATION_ERROR',message:'Work date cannot be in the past.'}});res.status(201).json(await labour.create({farmerId:req.user.id,workType:x.work_type.trim(),workersNeeded:Number(x.workers_needed),workDate:x.work_date,durationDays:Number(x.duration_days),latitude:x.latitude===''?null:Number(x.latitude),longitude:x.longitude===''?null:Number(x.longitude),locationName:x.location_name,budgetPerWorker:x.budget_per_worker===''?null:Number(x.budget_per_worker),notes:x.notes}));}
+async function matchNearbyWorkers(req,res){res.json({results:await labour.nearby({userId:req.user.id,latitude:req.query.latitude,longitude:req.query.longitude,radiusKm:Math.min(Math.max(Number(req.query.radius_km)||50,1),200)})});}
+async function listMyRequests(req,res){res.json({results:await labour.listMine(req.user.id)});}
+async function apply(req,res){const r=await labour.findRequest(req.params.id);if(!r||r.status!=='open')return res.status(404).json({error:{code:'NOT_AVAILABLE',message:'This request is no longer available.'}});if(r.farmer_id===req.user.id)return res.status(403).json({error:{code:'FORBIDDEN',message:'You cannot apply to your own request.'}});res.status(201).json(await labour.apply(r.id,req.user.id,req.body.message));}
+async function listApplications(req,res){const r=await labour.findRequest(req.params.id);if(!r)return res.status(404).json({error:{code:'NOT_FOUND',message:'Request not found.'}});if(r.farmer_id!==req.user.id&&req.user.role!=='admin')return res.status(403).json({error:{code:'FORBIDDEN',message:'Only the request owner can view applicants.'}});res.json({results:await labour.applications(r.id)});}
+async function decideApplication(req,res){if(!['accepted','rejected'].includes(req.body.status))return res.status(400).json({error:{code:'VALIDATION_ERROR',message:'Status must be accepted or rejected.'}});const a=await labour.findApplication(req.params.applicationId);if(!a)return res.status(404).json({error:{code:'NOT_FOUND',message:'Application not found.'}});const r=await labour.findRequest(a.request_id);if(r.farmer_id!==req.user.id&&req.user.role!=='admin')return res.status(403).json({error:{code:'FORBIDDEN',message:'Only the request owner can decide.'}});const updated=await labour.decide(a.id,req.body.status);await labour.refreshStatus(r.id);res.json(updated);}
+module.exports={createLabourRequest,matchNearbyWorkers,listMyRequests,apply,listApplications,decideApplication};

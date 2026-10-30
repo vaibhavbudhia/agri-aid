@@ -802,6 +802,12 @@ textarea:focus-visible {
   margin-top: var(--space-8);
 }
 
+.operations-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:var(--space-6); align-items:start; }
+.summary-row { display:grid; gap:4px; padding:12px 0; border-bottom:1px solid var(--line); }
+.summary-row span { color:var(--ink-soft); font-size:.85rem; }
+.positive { color:var(--brand-dark); } .negative { color:var(--danger); }
+@media (max-width: 850px) { .operations-grid { grid-template-columns:1fr; } }
+
 .star-row {
   display: flex;
   gap: 4px;
